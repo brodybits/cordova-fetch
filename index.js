@@ -19,15 +19,12 @@ const Q = require('q');
 const fs = require('fs-extra');
 const CordovaError = require('cordova-common').CordovaError;
 const { getInstalledPath } = require('get-installed-path');
-const npa = require('npm-package-arg');
-const semver = require('semver');
 
 const lib = require('./fetch-lib.js');
 const pathToInstalledPackage = lib.pathToInstalledPackage;
 const isNpmInstalled = lib.isNpmInstalled;
 const installPackage = lib.installPackage;
 const uninstallPackage = lib.uninstallPackage;
-const npmArgs = lib.npmArgs;
 
 /*
  * A function that npm installs a module from npm or a git url
