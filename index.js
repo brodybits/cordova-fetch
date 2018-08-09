@@ -22,7 +22,7 @@ const { getInstalledPath } = require('get-installed-path');
 const npa = require('npm-package-arg');
 const semver = require('semver');
 
-const lib = require('./lib/index.js');
+const lib = require('./fetch-lib.js');
 const pathToInstalledPackage = lib.pathToInstalledPackage;
 const isNpmInstalled = lib.isNpmInstalled;
 const installPackage = lib.installPackage;

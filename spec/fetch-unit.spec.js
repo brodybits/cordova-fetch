@@ -33,7 +33,7 @@ describe('fetch', function () {
             'fs-extra': {
                 ensureDirSync: _ => _
             },
-            './lib/index.js': {
+            './fetch-lib.js': {
                 pathToInstalledPackage: _ => pathToInstalledPackage(),
                 installPackage: installPackage
             }
@@ -61,7 +61,7 @@ describe('fetch', function () {
 });
 
 describe('npmArgs', function () {
-    const npmArgs = require('../lib').npmArgs;
+    const npmArgs = require('../fetch-lib.js').npmArgs;
 
     it('should handle missing options', function () {
         npmArgs('platform');
