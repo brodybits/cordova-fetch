@@ -18,20 +18,31 @@
 /* eslint-env jasmine */
 /* eslint-disable prefer-promise-reject-errors */
 
-const rewire = require('rewire');
+const proxyquire = require('proxyquire');
 
 describe('fetch', function () {
+    // overwrite per test case (hackish solution):
     let fetch, installPackage;
+    let pathToInstalledPackage = _ => Promise.reject('bogus');
 
     beforeEach(function () {
-        fetch = rewire('..');
         installPackage = jasmine.createSpy()
             .and.returnValue(Promise.resolve('/foo'));
-        fetch.__set__({ fs: { ensureDirSync: _ => _ }, installPackage });
+
+        fetch = proxyquire('../index', {
+            'fs-extra': {
+                ensureDirSync: _ => _
+            },
+            './lib/index.js': {
+                pathToInstalledPackage: _ => pathToInstalledPackage(),
+                installPackage: installPackage
+            }
+        });
+
     });
 
     it('should return path to installed package', function () {
-        fetch.__set__({ pathToInstalledPackage: _ => Promise.resolve('/foo') });
+        pathToInstalledPackage = _ => Promise.resolve('/foo');
 
         return fetch('foo', 'bar').then(result => {
             expect(result).toBe('/foo');
@@ -40,7 +51,7 @@ describe('fetch', function () {
     });
 
     it('should install package if not found', function () {
-        fetch.__set__({ pathToInstalledPackage: _ => Promise.reject() });
+        pathToInstalledPackage = _ => Promise.reject()
 
         return fetch('foo', 'bar').then(result => {
             expect(result).toBe('/foo');
@@ -50,8 +61,7 @@ describe('fetch', function () {
 });
 
 describe('npmArgs', function () {
-    const fetch = rewire('..');
-    const npmArgs = fetch.__get__('npmArgs');
+    const npmArgs = require('../lib').npmArgs;
 
     it('should handle missing options', function () {
         npmArgs('platform');
