@@ -32,7 +32,7 @@ describe('fetch', function () {
             .and.returnValue(Promise.resolve('/foo'));
 
         fetch = proxyquire('../index', {
-            'fs-extra': {
+            './imports.js': {
                 ensureDirSync: _ => _
             },
             './fetch-lib.js': {
