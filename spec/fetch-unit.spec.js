@@ -20,6 +20,8 @@
 
 const proxyquire = require('proxyquire');
 
+const npmArgs = require('../fetch-lib.js').npmArgs;
+
 describe('fetch', function () {
     // overwrite per test case (hackish solution):
     let fetch, installPackage;
@@ -61,8 +63,6 @@ describe('fetch', function () {
 });
 
 describe('npmArgs', function () {
-    const npmArgs = require('../fetch-lib.js').npmArgs;
-
     it('should handle missing options', function () {
         npmArgs('platform');
     });
