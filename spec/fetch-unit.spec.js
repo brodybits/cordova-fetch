@@ -22,7 +22,7 @@ const proxyquire = require('proxyquire');
 
 const npmArgs = require('../fetch-lib.js').npmArgs;
 
-describe('fetch', function () {
+describe('fetch - main function', function () {
     // overwrite per test case (hackish solution):
     let fetch, installPackage;
     let pathToInstalledPackage = _ => Promise.reject('bogus');
