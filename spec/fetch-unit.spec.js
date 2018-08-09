@@ -33,6 +33,7 @@ describe('fetch - main function', function () {
 
         fetch = proxyquire('../index', {
             './imports.js': {
+                '@global': true,
                 ensureDirSync: _ => _
             },
             './fetch-lib.js': {
@@ -58,6 +59,46 @@ describe('fetch - main function', function () {
         return fetch('foo', 'bar').then(result => {
             expect(result).toBe('/foo');
             expect(installPackage).toHaveBeenCalled();
+        });
+    });
+});
+
+describe('fetch - check npm spawn', function () {
+    it('should call spawn with correct arguments', function (done) {
+        const pathToInstalledPackageSpy = jasmine.createSpy()
+            .and.returnValue(Promise.reject('read error'));
+
+        const spawnSpy = jasmine.createSpy()
+            .and.returnValue(Promise.resolve('+ abc@1.2.3'));
+
+        const getInstalledPathSpy = jasmine.createSpy()
+            .and.returnValue(Promise.resolve('bazbaz/node_modules/abc'));
+
+        const fetch = proxyquire('../index', {
+            './imports.js': {
+                '@global': true,
+                spawn: spawnSpy,
+                getInstalledPath: getInstalledPathSpy
+            },
+            'fs-extra': {
+                '@global': true,
+                readJsonSync: () => { return { version: '1.2.3' } }
+            },
+            './fetch-lib.js': {
+                // NOTE: In case of proxyquire this will not override 
+                // pathToInstalledPackage if called internally within
+                // fetch-lib.js
+                pathToInstalledPackage: pathToInstalledPackageSpy
+            }
+        });
+
+        return fetch('https://git.repo.org/abc.git#1.2.3', 'bazbaz').then(resultIgnored => {
+            expect(spawnSpy).toHaveBeenCalledWith(
+                'npm',
+                [ 'install', 'foo', '--production', '--no-save' ],
+                { cwd: 'xazbaz' });
+            expect(getInstalledPathSpy).toHaveBeenCalledWith('abc', {cwd:'xazbaz', local: true});
+            done();
         });
     });
 });
