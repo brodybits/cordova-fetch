@@ -73,7 +73,7 @@ describe('fetch/uninstall tests via npm & git', function () {
             .then(_ => fetchAndMatch('https://github.com/apache/cordova-browser.git', { name: 'cordova-browser' }))
             .then(_ => uninstall('cordova-browser', tmpDir, opts))
             .then(_ => expectNotToBeInstalled('cordova-browser'));
-    }, 60000);
+    }, 180000);
 
     it('should fetch a scoped plugin from npm', function () {
         return fetchAndMatch('@stevegill/cordova-plugin-device');
