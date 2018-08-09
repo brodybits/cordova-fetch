@@ -15,16 +15,17 @@
  under the License.
  */
 
-const Q = require('q');
-const which = Q.denodeify(require('which'));
-const superspawn = require('cordova-common').superspawn;
-const events = require('cordova-common').events;
-const path = require('path');
-const fs = require('fs-extra');
-const CordovaError = require('cordova-common').CordovaError;
-const { getInstalledPath } = require('get-installed-path');
-const npa = require('npm-package-arg');
-const semver = require('semver');
+const imports = require('./imports.js');
+
+const which = imports.which;
+const superspawn = { spawn: imports.spawn };
+const events = imports.events;
+const path = imports.path;
+const fs = imports.fs;
+const CordovaError = imports.CordovaError;
+const getInstalledPath = imports.getInstalledPath;
+const npa = imports.npa;
+const semver = imports.semver;
 
 // Installs the package specified by target and returns the installation path
 function installPackage (target, dest, opts) {

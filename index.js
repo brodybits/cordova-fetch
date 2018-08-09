@@ -15,10 +15,12 @@
  under the License.
  */
 
-const Q = require('q');
-const fs = require('fs-extra');
-const CordovaError = require('cordova-common').CordovaError;
-const { getInstalledPath } = require('get-installed-path');
+
+const imports = require('./imports.js');
+
+const Q = imports.Q;
+const fs = imports.fs;
+const CordovaError = imports.CordovaError;
 
 const lib = require('./fetch-lib.js');
 const pathToInstalledPackage = lib.pathToInstalledPackage;
